@@ -1,0 +1,11 @@
+{
+  "name": "campusflow-ai",
+  "version": "1.0.0",
+  "description": "CampusFlow AI - Smart Campus Career & Opportunity Management Platform",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix client",
+    "start": "npm start --prefix server",
+    "seed": "npm run seed --prefix server"
+  }
+}
