@@ -4,8 +4,10 @@
   "description": "CampusFlow AI - Smart Campus Career & Opportunity Management Platform",
   "private": true,
   "scripts": {
-    "dev": "npm run dev --prefix client",
+    "postinstall": "npm install --prefix server",
+    "build": "npm install --prefix server",
     "start": "npm start --prefix server",
+    "dev": "npm run dev --prefix client",
     "seed": "npm run seed --prefix server"
   }
 }
