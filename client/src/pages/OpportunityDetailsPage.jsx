@@ -4,7 +4,6 @@ import MainLayout from '../layouts/MainLayout';
 import Badge from '../components/Badge';
 import Button from '../components/Button';
 import Modal from '../components/Modal';
-import Input from '../components/Input';
 import { CardSkeleton } from '../components/Skeleton';
 import { ErrorState } from '../components/EmptyState';
 import { useAuth } from '../context/AuthContext';
@@ -13,7 +12,6 @@ import { opportunityService, applicationService, savedService } from '../service
 import {
   Building2,
   MapPin,
-  Calendar,
   DollarSign,
   Bookmark,
   Send,
@@ -22,8 +20,7 @@ import {
   CheckCircle2,
   XCircle,
   Briefcase,
-  GraduationCap,
-  ShieldCheck
+  GraduationCap
 } from 'lucide-react';
 
 const OpportunityDetailsPage = () => {
@@ -48,29 +45,43 @@ const OpportunityDetailsPage = () => {
       setLoading(true);
       setError(false);
 
+      if (!id || id === 'undefined') {
+        setError(true);
+        setLoading(false);
+        return;
+      }
+
       const res = await opportunityService.getById(id);
-      if (res.success && res.data?.opportunity) {
-        setOpportunity(res.data.opportunity);
+      const oppData = res.opportunity || res.data?.opportunity;
+
+      if (res.success && oppData) {
+        setOpportunity(oppData);
+      } else {
+        setError(true);
+        setLoading(false);
+        return;
       }
 
       if (isAuthenticated) {
         const [savedRes, myAppsRes] = await Promise.all([
-          savedService.getSaved(),
-          applicationService.getMyApplications()
+          savedService.getSaved().catch(() => ({ success: false })),
+          applicationService.getMyApplications().catch(() => ({ success: false }))
         ]);
 
-        if (savedRes.success) {
-          const ids = (savedRes.data.saved || []).map((s) => s.opportunityId?._id || s.opportunityId);
+        if (savedRes && savedRes.success) {
+          const savedList = savedRes.saved || savedRes.data?.saved || [];
+          const ids = savedList.map((s) => s.opportunityId?._id || s.opportunityId);
           setIsSaved(ids.includes(id));
         }
 
-        if (myAppsRes.success) {
-          const applied = (myAppsRes.data.applications || []).some((a) => (a.opportunityId?._id || a.opportunityId) === id);
+        if (myAppsRes && myAppsRes.success) {
+          const appList = myAppsRes.applications || myAppsRes.data?.applications || [];
+          const applied = appList.some((a) => (a.opportunityId?._id || a.opportunityId) === id);
           setHasApplied(applied);
         }
       }
     } catch (err) {
-      console.error(err);
+      console.error('Fetch Details Error:', err);
       setError(true);
     } finally {
       setLoading(false);
@@ -140,6 +151,8 @@ const OpportunityDetailsPage = () => {
           <ErrorState
             title="Opportunity Not Found"
             message="The requested position does not exist or has been removed."
+            actionLabel="Back to Opportunities"
+            onAction={() => navigate('/opportunities')}
             onRetry={() => navigate('/opportunities')}
           />
         </div>
@@ -166,8 +179,8 @@ const OpportunityDetailsPage = () => {
           
           {/* Back Button */}
           <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors mb-6"
+            onClick={() => navigate('/opportunities')}
+            className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors mb-6 cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Opportunities
           </button>
@@ -178,7 +191,7 @@ const OpportunityDetailsPage = () => {
               
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-white text-2xl shadow-xl shrink-0">
-                  {opportunity.company.charAt(0).toUpperCase()}
+                  {opportunity.company ? opportunity.company.charAt(0).toUpperCase() : 'C'}
                 </div>
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
@@ -206,7 +219,7 @@ const OpportunityDetailsPage = () => {
               <div className="flex items-center gap-3 shrink-0">
                 <button
                   onClick={handleSaveToggle}
-                  className={`p-3 rounded-2xl border transition-all ${
+                  className={`p-3 rounded-2xl border transition-all cursor-pointer ${
                     isSaved
                       ? 'bg-blue-600/20 text-blue-400 border-blue-500/40'
                       : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
@@ -330,7 +343,7 @@ const OpportunityDetailsPage = () => {
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                   <span className="text-slate-400">Application Deadline</span>
                   <span className="font-bold text-white">
-                    {new Date(opportunity.deadline).toLocaleDateString()}
+                    {opportunity.deadline ? new Date(opportunity.deadline).toLocaleDateString() : 'N/A'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800">
@@ -340,7 +353,7 @@ const OpportunityDetailsPage = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Posted On</span>
                   <span className="font-bold text-white">
-                    {new Date(opportunity.createdAt).toLocaleDateString()}
+                    {opportunity.createdAt ? new Date(opportunity.createdAt).toLocaleDateString() : 'Recently'}
                   </span>
                 </div>
               </div>

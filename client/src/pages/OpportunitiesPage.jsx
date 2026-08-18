@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import OpportunityCard from '../components/OpportunityCard';
 import Button from '../components/Button';
@@ -9,11 +9,12 @@ import { EmptyState, ErrorState } from '../components/EmptyState';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { opportunityService, savedService } from '../services/api';
-import { Search, Filter, SlidersHorizontal, RefreshCw, X, ArrowUpDown } from 'lucide-react';
+import { Search, X, ArrowUpDown } from 'lucide-react';
 
 const OpportunitiesPage = () => {
   const { user, isAuthenticated } = useAuth();
   const { showToast } = useToast();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [opportunities, setOpportunities] = useState([]);
@@ -48,16 +49,21 @@ const OpportunitiesPage = () => {
       ]);
 
       if (oppRes.success) {
-        setOpportunities(oppRes.data.opportunities || []);
-        setPagination(oppRes.data.pagination || { page: 1, pages: 1, total: 0 });
+        const list = oppRes.opportunities || oppRes.data?.opportunities || [];
+        const pag = oppRes.data?.pagination || { page: 1, pages: 1, total: list.length };
+        setOpportunities(list);
+        setPagination(pag);
+      } else {
+        setError(true);
       }
 
-      if (savedRes.success) {
-        const ids = (savedRes.data.saved || []).map((s) => s.opportunityId?._id || s.opportunityId);
+      if (savedRes && savedRes.success) {
+        const savedList = savedRes.saved || savedRes.data?.saved || [];
+        const ids = savedList.map((s) => s.opportunityId?._id || s.opportunityId);
         setSavedIds(ids);
       }
     } catch (err) {
-      console.error(err);
+      console.error('Fetch Opportunities Error:', err);
       setError(true);
     } finally {
       setLoading(false);
@@ -202,7 +208,7 @@ const OpportunitiesPage = () => {
             {/* Results Count Bar */}
             <div className="flex items-center justify-between text-xs text-slate-400 px-1 pt-1">
               <span>
-                Found <strong className="text-white font-bold">{pagination.total}</strong> opportunities
+                Found <strong className="text-white font-bold">{opportunities.length}</strong> opportunities available
               </span>
             </div>
 
@@ -221,8 +227,8 @@ const OpportunitiesPage = () => {
             />
           ) : opportunities.length === 0 ? (
             <EmptyState
-              title="No opportunities found"
-              description="No opportunities match your current filter parameters."
+              title="No opportunities available right now"
+              description="No opportunities match your current search or filter criteria."
               actionLabel="Clear Filters"
               onAction={handleClearFilters}
             />
@@ -230,12 +236,12 @@ const OpportunitiesPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {opportunities.map((opp) => (
                 <OpportunityCard
-                  key={opp._id}
+                  key={opp._id || opp.id}
                   opportunity={opp}
                   userSkills={user?.skills || []}
-                  isSaved={savedIds.includes(opp._id)}
+                  isSaved={savedIds.includes(opp._id || opp.id)}
                   onSaveToggle={handleSaveToggle}
-                  onViewDetails={(id) => window.location.href = `/opportunities/${id}`}
+                  onViewDetails={(id) => navigate(`/opportunities/${id}`)}
                 />
               ))}
             </div>

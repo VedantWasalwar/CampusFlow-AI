@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Opportunity = require('../models/Opportunity');
 
 // @desc    Get all opportunities with search, filter, sort & pagination
@@ -70,6 +71,8 @@ const getOpportunities = async (req, res) => {
 
     res.json({
       success: true,
+      count: opportunities.length,
+      opportunities,
       data: {
         opportunities,
         pagination: {
@@ -94,22 +97,34 @@ const getOpportunities = async (req, res) => {
 // @access  Public
 const getOpportunityById = async (req, res) => {
   try {
-    const opportunity = await Opportunity.findById(req.params.id);
+    const { id } = req.params;
+
+    // Validate ID before querying MongoDB
+    if (!id || id === 'undefined' || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({
+        success: false,
+        message: 'Opportunity not found'
+      });
+    }
+
+    const opportunity = await Opportunity.findById(id);
     if (!opportunity) {
       return res.status(404).json({
         success: false,
-        message: 'Opportunity not found.'
+        message: 'Opportunity not found'
       });
     }
 
     res.json({
       success: true,
+      opportunity,
       data: { opportunity }
     });
   } catch (error) {
-    res.status(500).json({
+    console.error('Get Opportunity By ID Error:', error);
+    res.status(404).json({
       success: false,
-      message: 'Error retrieving opportunity details.'
+      message: 'Opportunity not found'
     });
   }
 };
@@ -155,6 +170,7 @@ const createOpportunity = async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Opportunity created successfully.',
+      opportunity,
       data: { opportunity }
     });
   } catch (error) {
@@ -171,11 +187,19 @@ const createOpportunity = async (req, res) => {
 // @access  Private/Admin
 const updateOpportunity = async (req, res) => {
   try {
-    const opportunity = await Opportunity.findById(req.params.id);
+    const { id } = req.params;
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({
+        success: false,
+        message: 'Opportunity not found'
+      });
+    }
+
+    const opportunity = await Opportunity.findById(id);
     if (!opportunity) {
       return res.status(404).json({
         success: false,
-        message: 'Opportunity not found.'
+        message: 'Opportunity not found'
       });
     }
 
@@ -184,7 +208,7 @@ const updateOpportunity = async (req, res) => {
       'stipend', 'salary', 'requiredSkills', 'eligibility', 'deadline'
     ];
 
-    fieldsToUpdate.forEach(field => {
+    fieldsToUpdate.forEach((field) => {
       if (req.body[field] !== undefined) {
         opportunity[field] = req.body[field];
       }
@@ -195,6 +219,7 @@ const updateOpportunity = async (req, res) => {
     res.json({
       success: true,
       message: 'Opportunity updated successfully.',
+      opportunity,
       data: { opportunity }
     });
   } catch (error) {
@@ -210,11 +235,19 @@ const updateOpportunity = async (req, res) => {
 // @access  Private/Admin
 const deleteOpportunity = async (req, res) => {
   try {
-    const opportunity = await Opportunity.findById(req.params.id);
+    const { id } = req.params;
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({
+        success: false,
+        message: 'Opportunity not found'
+      });
+    }
+
+    const opportunity = await Opportunity.findById(id);
     if (!opportunity) {
       return res.status(404).json({
         success: false,
-        message: 'Opportunity not found.'
+        message: 'Opportunity not found'
       });
     }
 
