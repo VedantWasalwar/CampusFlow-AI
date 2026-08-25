@@ -91,7 +91,7 @@ https://github.com/VedantWasalwar/CampusFlow-AI
 
 Example:
 
-```text
+text
 CampusFlow-AI/
 │
 ├── client/
@@ -107,7 +107,7 @@ CampusFlow-AI/
 ├── README.md
 └── LICENSE
 
-## 🏗️ Architecture Diagram
+🏗️ Architecture Diagram
 
 ```mermaid
 graph TD
@@ -244,4 +244,4 @@ graph TD
     Mongoose --> Applications
     Mongoose --> Saved
     Mongoose --> Notifications
-```
+`
