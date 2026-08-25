@@ -106,3 +106,28 @@ CampusFlow-AI/
 │
 ├── README.md
 └── LICENSE
+
+## Architecture Diagram
+
+mermaid
+graph TD
+    User([Student / Admin Client]) -->|HTTPS REST API| ExpressApp[Express.js Server]
+    ExpressApp -->|JWT & Role Middleware| AuthModule[Authentication & Security]
+    ExpressApp -->|Mongoose ORM| Database[(MongoDB Atlas)]
+    ExpressApp -->|Multer Engine| ResumeStorage[Disk Storage - /uploads]
+    ExpressApp -->|Rule Engine| SkillService[skillGapService.js]
+
+    subgraph Client [React + Vite Frontend]
+        Router[React Router DOM]
+        State[AuthContext & ToastContext]
+        UI[Framer Motion + Tailwind CSS + Recharts]
+    end
+
+    subgraph Server [Node.js Backend]
+        Controllers[Controllers Layer]
+        Services[Services & Models]
+        Security[Helmet + CORS + Rate Limiting]
+    end
+
+
+---
