@@ -107,141 +107,26 @@ CampusFlow-AI/
 ├── README.md
 └── LICENSE
 
-🏗️ Architecture Diagram
+## Architecture Diagram
 
-```mermaid
+mermaid
 graph TD
+    User([Student / Admin Client]) -->|HTTPS REST API| ExpressApp[Express.js Server]
+    ExpressApp -->|JWT & Role Middleware| AuthModule[Authentication & Security]
+    ExpressApp -->|Mongoose ORM| Database[(MongoDB Atlas)]
+    ExpressApp -->|Multer Engine| ResumeStorage[Disk Storage - /uploads]
+    ExpressApp -->|Rule Engine| SkillService[skillGapService.js]
 
-    %% =========================
-    %% USERS
-    %% =========================
-    Student([👨‍🎓 Student])
-    Admin([👨‍💼 Admin])
-
-    %% =========================
-    %% FRONTEND
-    %% =========================
-    subgraph Client["💻 React + Vite Frontend"]
-
-        UI["🎨 Responsive UI<br/>Tailwind CSS + Framer Motion"]
-
-        Router["🔀 React Router DOM"]
-
-        AuthContext["🔐 AuthContext<br/>Authentication State"]
-
-        Axios["📡 Axios API Client"]
-
-        Charts["📊 Recharts<br/>Analytics & Charts"]
-
-        StudentPages["👨‍🎓 Student Pages<br/>Dashboard • Opportunities<br/>Applications • Profile"]
-
-        AdminPages["👨‍💼 Admin Pages<br/>Dashboard • Opportunities<br/>Applications • Users"]
+    subgraph Client [React + Vite Frontend]
+        Router[React Router DOM]
+        State[AuthContext & ToastContext]
+        UI[Framer Motion + Tailwind CSS + Recharts]
     end
 
-    %% =========================
-    %% BACKEND
-    %% =========================
-    subgraph Server["⚙️ Node.js + Express Backend"]
-
-        Express["🚀 Express.js REST API"]
-
-        Middleware["🛡️ Middleware<br/>JWT • Role Authorization<br/>CORS • Helmet • Rate Limiting"]
-
-        AuthAPI["🔑 Authentication API<br/>Register • Login • JWT"]
-
-        OpportunityAPI["💼 Opportunity API<br/>Create • Read • Update • Delete"]
-
-        ApplicationAPI["📝 Application API<br/>Apply • Track • Update Status"]
-
-        SavedAPI["🔖 Saved Opportunity API"]
-
-        ProfileAPI["👤 Profile & Resume API"]
-
-        AdminAPI["📊 Admin API<br/>Analytics • Users • Applications"]
-
-        SkillAPI["🧠 Skill Gap API"]
-
-        SkillEngine["⚡ Rule-Based Skill Engine<br/>skillGapService.js"]
-
-        Multer["📄 Multer<br/>Resume Upload"]
+    subgraph Server [Node.js Backend]
+        Controllers[Controllers Layer]
+        Services[Services & Models]
+        Security[Helmet + CORS + Rate Limiting]
     end
 
-    %% =========================
-    %% DATABASE
-    %% =========================
-    subgraph Database["🍃 MongoDB Atlas"]
 
-        Mongoose["🔗 Mongoose ODM"]
-
-        Users[("👤 Users")]
-        Opportunities[("💼 Opportunities")]
-        Applications[("📝 Applications")]
-        Saved[("🔖 Saved Opportunities")]
-        Notifications[("🔔 Notifications")]
-    end
-
-    %% =========================
-    %% FILE STORAGE
-    %% =========================
-    Storage["📁 Resume Storage<br/>/uploads"]
-
-    %% =========================
-    %% USER → FRONTEND
-    %% =========================
-    Student --> UI
-    Admin --> UI
-
-    UI --> Router
-    UI --> AuthContext
-    Router --> StudentPages
-    Router --> AdminPages
-
-    StudentPages --> Axios
-    AdminPages --> Axios
-    AuthContext --> Axios
-
-    %% =========================
-    %% FRONTEND → BACKEND
-    %% =========================
-    Axios -->|"HTTPS REST API"| Express
-
-    %% =========================
-    %% BACKEND SECURITY
-    %% =========================
-    Express --> Middleware
-
-    Middleware --> AuthAPI
-    Middleware --> OpportunityAPI
-    Middleware --> ApplicationAPI
-    Middleware --> SavedAPI
-    Middleware --> ProfileAPI
-    Middleware --> AdminAPI
-    Middleware --> SkillAPI
-
-    %% =========================
-    %% SKILL ANALYZER
-    %% =========================
-    SkillAPI --> SkillEngine
-
-    %% =========================
-    %% RESUME
-    %% =========================
-    ProfileAPI --> Multer
-    Multer --> Storage
-
-    %% =========================
-    %% DATABASE CONNECTION
-    %% =========================
-    AuthAPI --> Mongoose
-    OpportunityAPI --> Mongoose
-    ApplicationAPI --> Mongoose
-    SavedAPI --> Mongoose
-    ProfileAPI --> Mongoose
-    AdminAPI --> Mongoose
-
-    Mongoose --> Users
-    Mongoose --> Opportunities
-    Mongoose --> Applications
-    Mongoose --> Saved
-    Mongoose --> Notifications
-`
