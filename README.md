@@ -2,6 +2,239 @@
 
 CampusFlow AI is a production-ready, modern, premium full-stack MERN application designed for college students to discover internships, track application lifecycles, manage deadlines, analyze technical skill gaps, manage verified resume documents, and monitor career progression.
 
+# 🚀 CampusFlow AI
+
+### 🎓 Smart Campus Career & Opportunity Management Platform
+
+CampusFlow AI is a **MERN stack career platform** that helps students discover internships and jobs, manage applications, track deadlines, upload resumes, and analyze the skills required for their target roles.
+
+> **Discover → Apply → Track → Improve → Grow 🚀**
+
+---
+
+## 🌐 Live Project
+
+### 🔗 [🚀 Visit CampusFlow AI](https://campusflow-ai.netlify.app/)
+
+**Backend API:** [View API Health](https://campusflow-ai-backend.onrender.com/api/health)
+
+**GitHub:** [CampusFlow-AI Repository](https://github.com/VedantWasalwar/CampusFlow-AI)
+
+---
+
+## 📸 Home Page
+
+<p align="center">
+  <a href="https://campusflow-ai.netlify.app/">
+    <img src="screenshots/home.png" alt="CampusFlow AI Home Page" width="900">
+  </a>
+</p>
+
+<p align="center">
+  👆 <b>Click the screenshot to visit the live website</b>
+</p>
+
+---
+
+## ✨ Features
+
+| 👨‍🎓 Student                 | 🧑‍💼 Admin                  |
+| ----------------------------- | ---------------------------- |
+| 🔐 Register & Login           | 📊 Analytics Dashboard       |
+| 💼 Job & Internship Discovery | 💼 Opportunity Management    |
+| 🔎 Search & Filters           | 👥 Student Management        |
+| 📌 Save Opportunities         | 📝 Application Management    |
+| 📝 Application Tracker        | 🔄 Update Application Status |
+| ⏰ Deadline Tracking           | 🔐 Role-Based Access         |
+| 📄 Resume Management          | 📈 Platform Statistics       |
+| 🧠 Skill Gap Analyzer         |                              |
+
+---
+
+## 🧠 Smart Skill Gap Analyzer
+
+```text
+👤 Student Skills
+        ↓
+💼 Target Opportunity
+        ↓
+🧠 Skill Matching Engine
+        ↓
+📊 Match Percentage
+        ↓
+❌ Missing Skills
+        ↓
+🎯 Learning Priority
+```
+
+The current Skill Gap Analyzer uses a **transparent rule-based matching algorithm**, making the recommendations explainable and easy to extend with an AI/LLM service in the future.
+
+---
+
+## 🛠️ Technology Stack
+
+### 🎨 Frontend
+
+<p>
+<img src="https://img.shields.io/badge/React_18-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+<img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+<img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white">
+</p>
+
+<p>
+<img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">
+<img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white">
+<img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white">
+<img src="https://img.shields.io/badge/Recharts-22B5BF?style=for-the-badge">
+</p>
+
+### ⚙️ Backend
+
+<p>
+<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
+<img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white">
+<img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
+<img src="https://img.shields.io/badge/bcrypt-338033?style=for-the-badge">
+<img src="https://img.shields.io/badge/Multer-FF6B35?style=for-the-badge">
+</p>
+
+### 🍃 Database
+
+<p>
+<img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
+<img src="https://img.shields.io/badge/MongoDB_Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white">
+<img src="https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=mongoose&logoColor=white">
+</p>
+
+### ☁️ Deployment & Tools
+
+<p>
+<img src="https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white">
+<img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black">
+<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/Git-181717?style=for-the-badge&logo=git&logoColor=white">
+</p>
+
+---
+
+## 🏗️ Architecture
+
+```text
+                👨‍🎓 Student / 🧑‍💼 Admin
+                         │
+                         ▼
+                ⚛️ React + Vite
+                         │
+                    REST API
+                         │
+                         ▼
+               🟢 Node.js + Express
+                         │
+          ┌──────────────┼──────────────┐
+          ▼              ▼              ▼
+       🔐 JWT       💼 REST APIs    🧠 Skill Engine
+          │              │              │
+          └──────────────┼──────────────┘
+                         ▼
+                    🔗 Mongoose
+                         │
+                         ▼
+                  🍃 MongoDB Atlas
+```
+
+---
+
+## 🔐 Security
+
+🔒 JWT Authentication
+🔑 bcrypt Password Hashing
+🛡️ Protected APIs
+👥 Role-Based Authorization
+🌐 CORS Protection
+🪖 Helmet Security
+🚦 Rate Limiting
+🔐 Environment Variables
+📄 Resume File Validation
+
+---
+
+## 📂 Project Structure
+
+```text
+CampusFlow-AI/
+│
+├── client/          ⚛️ React Frontend
+├── server/          🟢 Express Backend
+├── screenshots/     📸 Screenshots
+├── .gitignore
+├── .env.example
+├── README.md
+└── LICENSE
+```
+
+---
+
+## ⚡ Run Locally
+
+### Backend
+
+```bash
+cd server
+npm install
+npm start
+```
+
+### Frontend
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+---
+
+## ☁️ Deployment
+
+| Component      | Platform      | Status       |
+| -------------- | ------------- | ------------ |
+| 🎨 Frontend    | Netlify       | 🟢 Live      |
+| ⚙️ Backend     | Render        | 🟢 Live      |
+| 🍃 Database    | MongoDB Atlas | 🟢 Connected |
+| 💻 Source Code | GitHub        | 🟢 Public    |
+
+---
+
+## 👨‍💻 Developer
+
+### Vedant Wasalwar
+
+🎓 **B.Tech – Computer Science & Engineering**
+S.B. Jain Institute of Technology, Management & Research, Nagpur
+
+[![GitHub](https://img.shields.io/badge/GitHub-VedantWasalwar-181717?style=for-the-badge\&logo=github)](https://github.com/VedantWasalwar)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Vedant_Wasalwar-0A66C2?style=for-the-badge\&logo=linkedin\&logoColor=white)](https://linkedin.com/in/vedant-wasalwar-b2128128b)
+
+---
+
+<p align="center">
+
+### 🚀 CampusFlow AI
+
+**Discover. Apply. Track. Improve. Grow.**
+
+⭐ If you like this project, consider giving it a star!
+
+</p>
+
+
+
+
+
+
+
 ---
 
 ## Architecture Diagram
